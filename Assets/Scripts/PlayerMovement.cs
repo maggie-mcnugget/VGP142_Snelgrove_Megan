@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    public Animator animator;
+
     public Camera playerCamera;
     public float walkSpeed = 6f;
     public float runSpeed = 12f;
@@ -20,14 +22,28 @@ public class PlayerMovement : MonoBehaviour
     private float rotationX = 0;
     private CharacterController characterController;
 
-    private bool canMove = true;
+    public bool canMove = true;
+
+    private float originalWalkSpeed;
+    private float originalRunSpeed;
+
+    private Vector3 originalCenter;
+    private float originalHeight;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        animator = GetComponentInChildren<Animator>();
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-    }
+
+        originalWalkSpeed = walkSpeed;
+        originalRunSpeed = runSpeed;
+
+        originalHeight = characterController.height;
+        originalCenter = characterController.center;
+    } 
 
     void Update()
     {
@@ -57,18 +73,39 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.R) && canMove)
         {
             characterController.height = crouchHeight;
+
+            characterController.center = new Vector3(
+                originalCenter.x,
+                originalCenter.y - (originalHeight - crouchHeight) / 2f,
+                originalCenter.z
+            );
+
             walkSpeed = crouchSpeed;
             runSpeed = crouchSpeed;
 
+            animator.SetBool("isCrouching", true);
         }
         else
         {
-            characterController.height = defaultHeight;
-            walkSpeed = 6f;
-            runSpeed = 12f;
+            characterController.height = originalHeight;
+            characterController.center = originalCenter;
+
+            walkSpeed = originalWalkSpeed;
+            runSpeed = originalRunSpeed;
+
+            animator.SetBool("isCrouching", false);
         }
 
         characterController.Move(moveDirection * Time.deltaTime);
+
+        Vector3 horizontalVelocity = new Vector3(characterController.velocity.x, 0, characterController.velocity.z);
+
+        float speed = horizontalVelocity.magnitude;
+        speed = (speed < 0.1f) ? 0f : speed;
+
+        animator.SetFloat("Speed", speed, 0.1f, Time.deltaTime);
+
+        animator.SetBool("isRunning", isRunning);
 
         if (canMove)
         {

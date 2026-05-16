@@ -10,6 +10,17 @@ public class PlayerSpawner : MonoBehaviour
         int randomIndex = Random.Range(0, spawnPoints.Length);
         Transform spawnPoint = spawnPoints[randomIndex];
 
-        Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
+       
+
+        GameObject playerObj = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
+
+        playerObj.name = "PlayerRuntime";
+
+        SimpleFollowAI[] enemies = FindObjectsOfType<SimpleFollowAI>();
+
+        foreach (var enemy in enemies)
+        {
+            enemy.SetTarget(playerObj.transform);
+        }
     }
 }
