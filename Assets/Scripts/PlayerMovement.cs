@@ -30,6 +30,24 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 originalCenter;
     private float originalHeight;
 
+    [Header("Combat")]
+    public float punchRange = 2f;
+    public float kickRange = 3f;
+
+    public float punchDamage = 25f;
+    public float kickDamage = 50f;
+
+    [Header("Ranged Attack")]
+    public GameObject projectilePrefab;
+    public Transform firePoint;
+    public float shootForce = 20f;
+    public float shootCooldown = 1f;
+
+    private float shootTimer;
+
+
+
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -114,5 +132,74 @@ public class PlayerMovement : MonoBehaviour
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
         }
+
+        if (canMove && Input.GetMouseButtonDown(0))
+        {
+            Punch();
+        }
+
+        if (canMove && Input.GetMouseButtonDown(1))
+        {
+            Kick();
+        }
+
+        shootTimer -= Time.deltaTime;
+
+        if (canMove && Input.GetKeyDown(KeyCode.E) && shootTimer <= 0f)
+        {
+            Shoot();
+            shootTimer = shootCooldown;
+        }
+
     }
+        void Punch()
+        {
+            animator.SetTrigger("Punch");
+
+            Collider[] hits = Physics.OverlapSphere(transform.position, punchRange);
+
+            foreach (Collider hit in hits)
+            {
+                MeleeEnemy enemy = hit.GetComponentInParent<MeleeEnemy>();
+
+                if (enemy != null)
+                {
+                enemy.TakeDamage(punchDamage, "Punch");
+                }
+            }
+        }
+
+        void Kick()
+        {
+            animator.SetTrigger("Kick");
+
+            Collider[] hits = Physics.OverlapSphere(transform.position, kickRange);
+
+            foreach (Collider hit in hits)
+            {
+                MeleeEnemy enemy = hit.GetComponentInParent<MeleeEnemy>();
+
+                if (enemy != null)
+                {
+                enemy.TakeDamage(kickDamage, "Kick");
+                }
+            }
+        }
+
+    void Shoot()
+    {
+        animator.SetTrigger("Shoot");
+
+        if (projectilePrefab == null || firePoint == null) return;
+
+        GameObject proj = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+
+        Rigidbody rb = proj.GetComponent<Rigidbody>();
+
+        if (rb != null)
+        {
+            rb.linearVelocity = playerCamera.transform.forward * shootForce;
+        }
+    }
+
 }

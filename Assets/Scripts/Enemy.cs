@@ -23,6 +23,7 @@ public class SimpleFollowAI : MonoBehaviour
     private NavMeshAgent agent;
     private Transform cam;
 
+    private Animator animator;
 
     bool IsBeingLookedAt()
     {
@@ -45,6 +46,8 @@ public class SimpleFollowAI : MonoBehaviour
 
         renderers = GetComponentsInChildren<Renderer>();
 
+        animator = GetComponentInChildren<Animator>();
+
     }
 
     void Update()
@@ -64,6 +67,10 @@ public class SimpleFollowAI : MonoBehaviour
             }
 
             agent.isStopped = true;
+
+            if (animator != null)
+                animator.SetBool("Moving", false);
+
             return;
         }
         else
@@ -79,6 +86,9 @@ public class SimpleFollowAI : MonoBehaviour
 
         agent.isStopped = false;
         agent.SetDestination(player.position);
+
+        if (animator != null)
+            animator.SetBool("Moving", true);
 
         shootTimer -= Time.deltaTime;
 
@@ -99,6 +109,9 @@ public class SimpleFollowAI : MonoBehaviour
     void Shoot()
     {
         if (projectilePrefab == null || firePoint == null) return;
+
+        if (animator != null)
+            animator.SetTrigger("Shoot");
 
         GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
 

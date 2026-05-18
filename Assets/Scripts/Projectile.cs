@@ -9,11 +9,11 @@ public class Projectile : MonoBehaviour
         Destroy(gameObject, lifeTime);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            PlayerRespawn respawn = collision.gameObject.GetComponent<PlayerRespawn>();
+            PlayerRespawn respawn = other.GetComponentInParent<PlayerRespawn>();
 
             if (respawn != null)
             {

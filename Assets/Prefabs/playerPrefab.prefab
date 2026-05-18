@@ -33,6 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3622623472103882883}
+  - {fileID: 4198005559523850926}
   m_Father: {fileID: 6765984271022110804}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &694829859974727399
@@ -264,6 +265,7 @@ GameObject:
   - component: {fileID: 7141243071019403792}
   - component: {fileID: 5158509744990507126}
   - component: {fileID: 2132613827462642556}
+  - component: {fileID: 8006013430576025171}
   m_Layer: 7
   m_Name: playerPrefab
   m_TagString: Player
@@ -286,6 +288,7 @@ Transform:
   m_Children:
   - {fileID: 8010979065823352311}
   - {fileID: 1878047180300106567}
+  - {fileID: 7351601974837354044}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &7141243071019403792
@@ -337,6 +340,14 @@ MonoBehaviour:
   crouchHeight: 1
   crouchSpeed: 2
   canMove: 1
+  punchRange: 2
+  kickRange: 3
+  punchDamage: 25
+  kickDamage: 50
+  projectilePrefab: {fileID: 7348802413708642369, guid: 6c73463c5dad1d14ca1ecd9eff71af3d, type: 3}
+  firePoint: {fileID: 7351601974837354044}
+  shootForce: 20
+  shootCooldown: 1
 --- !u!114 &2132613827462642556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,9 +360,105 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b136096613fbad47bd95683c222de90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRespawn
-  spawnPoints:
-  - {fileID: 0}
-  - {fileID: 0}
+--- !u!114 &8006013430576025171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6128839296941147976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 904975297585b1f49a094d51deea213b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  health: 100
+--- !u!1 &7526135879871945301
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4198005559523850926}
+  - component: {fileID: 8997947299527889361}
+  m_Layer: 7
+  m_Name: GameObject
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4198005559523850926
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7526135879871945301}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8010979065823352311}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &8997947299527889361
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7526135879871945301}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2.1202753
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.122501016, z: 0}
+--- !u!1 &9026238658689723926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7351601974837354044}
+  m_Layer: 7
+  m_Name: ShootPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7351601974837354044
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9026238658689723926}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.402, y: 0.641, z: 0.826}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6765984271022110804}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3876646723183175528
 PrefabInstance:
   m_ObjectHideFlags: 0
